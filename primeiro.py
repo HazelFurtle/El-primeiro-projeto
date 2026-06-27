@@ -1,5 +1,7 @@
 import discord
 import random
+import os
+import requests
 
 from discord.ext import commands
 
@@ -36,5 +38,28 @@ async def roll(ctx, dice: str):
 async def add(ctx, left: int, right: int):
     """Adds two numbers together."""
     await ctx.send(left + right)
+
+@bot.command()
+async def meme(ctx):
+    with open('imagens/nanner.png', 'rb') as f:
+        #Vamos armazenar o arquivo convertido da biblioteca do Discord nesta variável!
+        picture = discord.File(f)
+    # Podemos então enviar esse arquivo como um parâmetro
+    await ctx.send(file=picture)
+
+def get_duck_image_url():    
+    url = 'https://random-d.uk/api/random'
+    res = requests.get(url)
+    data = res.json()
+    return data['url']
+
+
+@bot.command('duck')
+async def duck(ctx):
+    '''Uma vez que chamamos o comando duck, o programa chama a função get_duck_image_url '''
+    image_url = get_duck_image_url()
+    await ctx.send(image_url)
+
+
 
 bot.run("MAHTOKEN")
